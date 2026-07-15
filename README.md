@@ -16,7 +16,7 @@ La pagina presenta **due formule tra cui scegliere**:
 | Formula | Cosa include | Prezzo |
 |---|---|---|
 | **Tagliere di Carne** | 4 pezzi a scelta direttamente al banco | **19,90 €** |
-| **Il Tris** | Tris di carne + **acqua e caffè inclusi** | **13 €** |
+| **Piatto Tris** | Primo, secondo e contorno + **acqua e caffè inclusi** | **13 €** |
 
 La scelta della formula è integrata anche nel modulo di prenotazione
 (campo *"Quale formula"*), così arriva insieme alla prenotazione.
