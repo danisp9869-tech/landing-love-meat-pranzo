@@ -322,6 +322,27 @@ window.LP_CONFIG = (function () {
   phoneEl.addEventListener("input",validate);
   ctaEl.addEventListener("click",submit);
   var cl=$("call-link"); if(cl) cl.href="tel:"+PHONE;
+
+  // Nasconde la barra sticky quando il form è a schermo: niente doppio bottone.
+  var stickyEl=document.querySelector(".sticky-cta");
+  if(stickyEl&&bookEl){
+    if("IntersectionObserver" in window){
+      var io=new IntersectionObserver(function(entries){
+        stickyEl.style.display=entries[0].isIntersecting?"none":"";
+      },{threshold:0.01});
+      io.observe(bookEl);
+    }else{
+      // Fallback per browser senza IntersectionObserver
+      var onScroll=function(){
+        var r=bookEl.getBoundingClientRect();
+        var visible=r.top<(window.innerHeight||document.documentElement.clientHeight)&&r.bottom>0;
+        stickyEl.style.display=visible?"none":"";
+      };
+      window.addEventListener("scroll",onScroll,{passive:true});
+      window.addEventListener("resize",onScroll); onScroll();
+    }
+  }
+
   renderSlots();
 })();
 </script>
