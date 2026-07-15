@@ -45,6 +45,14 @@ img{max-width:100%;display:block}
 .sub{color:var(--muted);font-size:16px;max-width:46ch;margin:0 auto}
 .sub b{color:var(--text)}
 
+/* ---- INDIRIZZO (scritta semplice, ben leggibile, tap su mappa) ---- */
+.addr-wrap{text-align:center;margin:0 0 18px}
+.addr-line{display:inline-flex;align-items:center;gap:7px;color:var(--text);font-size:15.5px;font-weight:600;text-decoration:none;line-height:1.3}
+.addr-line .pin{color:var(--gold);font-size:16px;flex:0 0 auto}
+.addr-line .street{border-bottom:1px solid rgba(233,196,106,.55)}
+.addr-line:hover .street{border-bottom-color:var(--gold);color:var(--gold)}
+.foot .addr-line{font-size:14px;font-weight:600}
+
 /* ---- BLOCCO OFFERTE (due scelte) ---- */
 .offers{display:flex;flex-wrap:wrap;gap:14px;margin:22px auto 0;max-width:460px}
 .offer-card{flex:1 1 200px;position:relative;background:linear-gradient(180deg,#1e1a16,#141210);border:1px solid rgba(233,196,106,.35);border-radius:16px;padding:20px 18px;box-shadow:0 10px 30px rgba(0,0,0,.4);text-align:center}
@@ -139,6 +147,11 @@ img{max-width:100%;display:block}
   </div>
 
   <div class="wrap hero-offer">
+    <div class="addr-wrap">
+      <a class="addr-line" href="https://www.google.com/maps/search/?api=1&query=Largo+II+Giugno+2%2C+10044+Pianezza+TO" target="_blank" rel="noopener">
+        <span class="pin">📍</span><span><span class="street">Largo II Giugno 2</span> · Pianezza (TO)</span>
+      </a>
+    </div>
     <p class="sub">La pausa pranzo di chi non ha voglia del solito panino. <b>Carne di qualità servita in fretta</b>, senza attese e senza spendere una fortuna. Scegli tu come mangiare oggi.</p>
 
     <div class="offers">
@@ -206,7 +219,12 @@ img{max-width:100%;display:block}
   </section>
 
   <div class="foot">
-    <div><b>I Love Meat</b> · Pianezza (TO)</div>
+    <div><b>I Love Meat</b></div>
+    <div class="addr" style="margin-top:8px">
+      <a class="addr-line" href="https://www.google.com/maps/search/?api=1&query=Largo+II+Giugno+2%2C+10044+Pianezza+TO" target="_blank" rel="noopener">
+        <span class="pin">📍</span><span><span class="street">Largo II Giugno 2</span> · 10044 Pianezza (TO)</span>
+      </a>
+    </div>
     <div class="addr">Pranzo Lun–Ven 12:00–14:30 · Chiuso sabato e domenica a pranzo</div>
   </div>
 </main>
