@@ -170,6 +170,10 @@ img{max-width:100%;display:block}
 .book .success .det{background:#faf7f1;border-color:#e6dfd4;color:#1a1612}
 .book .success .det span{color:#8a8175}
 .book .success .again{color:var(--gold-d)}
+/* consenso privacy (form bianco) */
+.privacy-consent{display:flex;align-items:flex-start;gap:9px;margin:2px 0 14px;font-size:12.5px;line-height:1.45;font-weight:500;color:#5c5349;cursor:pointer}
+.privacy-consent input{width:18px;height:18px;flex:0 0 auto;margin-top:1px;accent-color:var(--red);cursor:pointer}
+.privacy-consent a{color:var(--gold-d);text-decoration:underline}
 </style>
 </head>
 <body>
@@ -256,6 +260,11 @@ img{max-width:100%;display:block}
       <input type="tel" id="telefono" autocomplete="tel" placeholder="Es. 345 688 1360" required>
     </div>
 
+    <label class="privacy-consent" for="privacy">
+      <input type="checkbox" id="privacy" required>
+      <span>Ho letto e accetto l'<a href="privacy.html" target="_blank" rel="noopener">informativa sulla privacy</a> e acconsento al trattamento dei dati per gestire la prenotazione.</span>
+    </label>
+
     <button class="cta" id="cta" disabled>Prenota il pranzo</button>
     <div class="err" id="err"></div>
 
@@ -310,7 +319,7 @@ window.LP_CONFIG = (function () {
   var SHEET_URL = C.googleSheetsWebAppUrl || "";
   var $ = function (id) { return document.getElementById(id); };
   var dateEl=$("data"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
-      nameEl=$("nome"),phoneEl=$("telefono"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
+      nameEl=$("nome"),phoneEl=$("telefono"),privacyEl=$("privacy"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
 
   var today=new Date(); today.setHours(0,0,0,0);
   var iso=function(d){return d.toISOString().slice(0,10);};
@@ -354,13 +363,13 @@ window.LP_CONFIG = (function () {
   }
 
   function validate(){
-    var ok=dateEl.value&&peopleEl.value&&slotInput.value&&nameEl.value.trim().length>=2&&phoneEl.value.trim().length>=6;
+    var ok=dateEl.value&&peopleEl.value&&slotInput.value&&nameEl.value.trim().length>=2&&phoneEl.value.trim().length>=6&&privacyEl.checked;
     if(ctaEl) ctaEl.disabled=!ok; return ok;
   }
   function fmtDate(s){var p=s.split("-");return p[2]+"/"+p[1]+"/"+p[0];}
 
   function submit(){
-    if(!validate()){errEl.textContent="Compila giorno, persone, orario, nome e telefono.";return;}
+    if(!validate()){errEl.textContent="Compila tutti i campi e accetta l'informativa privacy per confermare.";return;}
     errEl.textContent="";
     var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim();
     /* >>> Salva la prenotazione su Google Sheet (se configurato l'URL). <<< */
@@ -403,6 +412,7 @@ window.LP_CONFIG = (function () {
   peopleEl.addEventListener("change",renderSlots);
   nameEl.addEventListener("input",validate);
   phoneEl.addEventListener("input",validate);
+  privacyEl.addEventListener("change",validate);
   ctaEl.addEventListener("click",submit);
   var cl=$("call-link"); if(cl){ cl.href="tel:"+PHONE; cl.addEventListener("click",function(){ if(window.fbq) fbq('track','Contact'); }); }
 
