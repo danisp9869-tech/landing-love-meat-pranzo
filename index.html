@@ -291,6 +291,9 @@ window.LP_CONFIG = (function () {
     lunch: ["12:00","12:30","13:00","13:30","14:00","14:30"],
     closedDays: [0,6],   // 0=dom … 6=sab → pranzo chiuso sabato e domenica
     offerName: "Menu Pranzo · Tagliere 19,90€ o Tris 13€",
+    // Incolla qui l'URL della Web App di Google Apps Script (finisce con /exec)
+    // per salvare le prenotazioni su Google Sheet. Vuoto = nessun invio.
+    googleSheetsWebAppUrl: "https://script.google.com/macros/s/AKfycbwf02q9O3OMNIMNrTGvAkg795RCR_zHV3sNFzz_BZoKtZ0bkWwUmudXWC4YanqQaNCC/exec",
     booked: booked
   };
 })();
@@ -304,6 +307,7 @@ window.LP_CONFIG = (function () {
   var LUNCH = C.lunch || ["12:00","12:30","13:00","13:30","14:00","14:30"];
   var CLOSED = C.closedDays || [0,6];
   var BOOKED = C.booked || {};
+  var SHEET_URL = C.googleSheetsWebAppUrl || "";
   var $ = function (id) { return document.getElementById(id); };
   var dateEl=$("data"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
       nameEl=$("nome"),phoneEl=$("telefono"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
@@ -359,7 +363,20 @@ window.LP_CONFIG = (function () {
     if(!validate()){errEl.textContent="Compila giorno, persone, orario, nome e telefono.";return;}
     errEl.textContent="";
     var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim();
-    /* >>> PRODUZIONE: qui va la POST che registra la prenotazione nel gestionale. <<< */
+    /* >>> Salva la prenotazione su Google Sheet (se configurato l'URL). <<< */
+    if(SHEET_URL){
+      try{
+        fetch(SHEET_URL,{
+          method:"POST",
+          mode:"no-cors",
+          headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body:JSON.stringify({
+            data:fmtDate(date), ora:slot, persone:people,
+            nome:nome, telefono:tel, creata:new Date().toLocaleString("it-IT")
+          })
+        }).catch(function(){});
+      }catch(e){}
+    }
     /* Meta Pixel: conversione prenotazione (evento più importante) */
     if(window.fbq) fbq('track','Lead',{content_name:'Prenotazione pranzo I Love Meat',content_category:'prenotazione'});
     bookEl.innerHTML=
