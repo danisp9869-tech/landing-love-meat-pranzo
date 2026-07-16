@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>I Love Meat · Pianezza — Menu Pranzo: Tagliere 19,90€ o Tris 13€</title>
 <meta name="description" content="La pausa pranzo di carne a Pianezza. Scegli: Tagliere di carne, 4 pezzi a scelta al banco a 19,90€, oppure il Piatto Tris (primo, secondo e contorno) con acqua e caffè inclusi a 13€. Veloce, senza attese. Prenota il tuo tavolo.">
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1752658912398511');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
 <style>
 /* I Love Meat — landing menu pranzo, due offerte. Oro premium su nero, CTA rossa. Mobile-first. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -341,6 +360,8 @@ window.LP_CONFIG = (function () {
     errEl.textContent="";
     var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim();
     /* >>> PRODUZIONE: qui va la POST che registra la prenotazione nel gestionale. <<< */
+    /* Meta Pixel: conversione prenotazione (evento più importante) */
+    if(window.fbq) fbq('track','Lead',{content_name:'Prenotazione pranzo I Love Meat',content_category:'prenotazione'});
     bookEl.innerHTML=
       '<div class="success"><div class="ok">✓</div>'+
       '<h3>Pranzo prenotato, '+nome.split(" ")[0]+'!</h3>'+
@@ -352,7 +373,7 @@ window.LP_CONFIG = (function () {
         '<div><span>A nome di:</span> '+nome+'</div>'+
         '<div><span>Telefono:</span> '+tel+'</div>'+
       '</div>'+
-      '<a class="again" href="tel:'+PHONE+'">Preferisci confermare a voce? Chiamaci</a></div>';
+      '<a class="again" href="tel:'+PHONE+'" onclick="if(window.fbq)fbq(\'track\',\'Contact\')">Preferisci confermare a voce? Chiamaci</a></div>';
     bookEl.scrollIntoView({behavior:"smooth",block:"center"});
   }
 
@@ -366,7 +387,7 @@ window.LP_CONFIG = (function () {
   nameEl.addEventListener("input",validate);
   phoneEl.addEventListener("input",validate);
   ctaEl.addEventListener("click",submit);
-  var cl=$("call-link"); if(cl) cl.href="tel:"+PHONE;
+  var cl=$("call-link"); if(cl){ cl.href="tel:"+PHONE; cl.addEventListener("click",function(){ if(window.fbq) fbq('track','Contact'); }); }
 
   // Nasconde la barra sticky quando il form è a schermo: niente doppio bottone.
   var stickyEl=document.querySelector(".sticky-cta");
