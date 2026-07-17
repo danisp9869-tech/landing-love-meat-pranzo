@@ -259,6 +259,10 @@ img{max-width:100%;display:block}
       <label for="telefono">Telefono</label>
       <input type="tel" id="telefono" autocomplete="tel" placeholder="Es. 345 688 1360" required>
     </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" autocomplete="email" placeholder="latua@email.it" required>
+    </div>
 
     <label class="privacy-consent" for="privacy">
       <input type="checkbox" id="privacy" required>
@@ -319,7 +323,7 @@ window.LP_CONFIG = (function () {
   var SHEET_URL = C.googleSheetsWebAppUrl || "";
   var $ = function (id) { return document.getElementById(id); };
   var dateEl=$("data"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
-      nameEl=$("nome"),phoneEl=$("telefono"),privacyEl=$("privacy"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
+      nameEl=$("nome"),phoneEl=$("telefono"),emailEl=$("email"),privacyEl=$("privacy"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
 
   var today=new Date(); today.setHours(0,0,0,0);
   var iso=function(d){return d.toISOString().slice(0,10);};
@@ -363,7 +367,8 @@ window.LP_CONFIG = (function () {
   }
 
   function validate(){
-    var ok=dateEl.value&&peopleEl.value&&slotInput.value&&nameEl.value.trim().length>=2&&phoneEl.value.trim().length>=6&&privacyEl.checked;
+    var emailOk=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailEl.value.trim());
+    var ok=dateEl.value&&peopleEl.value&&slotInput.value&&nameEl.value.trim().length>=2&&phoneEl.value.trim().length>=6&&emailOk&&privacyEl.checked;
     if(ctaEl) ctaEl.disabled=!ok; return ok;
   }
   function fmtDate(s){var p=s.split("-");return p[2]+"/"+p[1]+"/"+p[0];}
@@ -371,7 +376,7 @@ window.LP_CONFIG = (function () {
   function submit(){
     if(!validate()){errEl.textContent="Compila tutti i campi e accetta l'informativa privacy per confermare.";return;}
     errEl.textContent="";
-    var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim();
+    var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim(),email=emailEl.value.trim();
     /* >>> Salva la prenotazione su Google Sheet (se configurato l'URL). <<< */
     if(SHEET_URL){
       try{
@@ -381,7 +386,7 @@ window.LP_CONFIG = (function () {
           headers:{"Content-Type":"text/plain;charset=utf-8"},
           body:JSON.stringify({
             data:fmtDate(date), ora:slot, persone:people,
-            nome:nome, telefono:tel, creata:new Date().toLocaleString("it-IT")
+            nome:nome, telefono:tel, email:email, creata:new Date().toLocaleString("it-IT")
           })
         }).catch(function(){});
       }catch(e){}
@@ -398,6 +403,7 @@ window.LP_CONFIG = (function () {
         '<div><span>Orario:</span> '+slot+'</div>'+
         '<div><span>A nome di:</span> '+nome+'</div>'+
         '<div><span>Telefono:</span> '+tel+'</div>'+
+        '<div><span>Email:</span> '+email+'</div>'+
       '</div>'+
       '<a class="again" href="tel:'+PHONE+'" onclick="if(window.fbq)fbq(\'track\',\'Contact\')">Preferisci confermare a voce? Chiamaci</a></div>';
     bookEl.scrollIntoView({behavior:"smooth",block:"center"});
@@ -412,6 +418,7 @@ window.LP_CONFIG = (function () {
   peopleEl.addEventListener("change",renderSlots);
   nameEl.addEventListener("input",validate);
   phoneEl.addEventListener("input",validate);
+  emailEl.addEventListener("input",validate);
   privacyEl.addEventListener("change",validate);
   ctaEl.addEventListener("click",submit);
   var cl=$("call-link"); if(cl){ cl.href="tel:"+PHONE; cl.addEventListener("click",function(){ if(window.fbq) fbq('track','Contact'); }); }
