@@ -326,7 +326,8 @@ window.LP_CONFIG = (function () {
       nameEl=$("nome"),phoneEl=$("telefono"),emailEl=$("email"),privacyEl=$("privacy"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
 
   var today=new Date(); today.setHours(0,0,0,0);
-  var iso=function(d){return d.toISOString().slice(0,10);};
+  var iso=function(d){var m=d.getMonth()+1,g=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(g<10?"0":"")+g;};
+  var slotMin=function(s){var p=s.split(":");return (+p[0])*60+(+p[1]);};
   dateEl.min=iso(today); if(!dateEl.value) dateEl.value=iso(today);
 
   for(var n=1;n<=20;n++){var o=document.createElement("option");o.value=n;o.textContent=n+(n===1?" persona":" persone");peopleEl.appendChild(o);}
@@ -338,6 +339,17 @@ window.LP_CONFIG = (function () {
     var date=dateEl.value, people=parseInt(peopleEl.value,10)||0;
     slotInput.value=""; slotsEl.innerHTML="";
     if(!date||!people) return;
+
+    var now=new Date(); var oggiStr=iso(now); var nowMin=now.getHours()*60+now.getMinutes();
+
+    // Giorno già passato: non prenotabile
+    if(date<oggiStr){
+      var pn=document.createElement("div"); pn.className="slot-note";
+      pn.textContent="Questa data è già passata. Scegli un giorno da oggi in poi.";
+      slotsEl.appendChild(pn);
+      validate(); return;
+    }
+    var oggi=(date===oggiStr);
 
     var p=date.split("-"); var dow=new Date(+p[0],+p[1]-1,+p[2]).getDay(); // 0=dom … 6=sab
 
@@ -351,18 +363,27 @@ window.LP_CONFIG = (function () {
     var h=document.createElement("div"); h.className="slot-group-label"; h.textContent="Pranzo";
     slotsEl.appendChild(h);
     var row=document.createElement("div"); row.className="slots-row";
+    var disponibili=0;
     LUNCH.forEach(function(slot){
-      var full=(bookedFor(date,slot)+people)>(CAPACITY+GAP);
+      var passato=oggi && slotMin(slot)<=nowMin;               // orario già trascorso oggi
+      var full=(bookedFor(date,slot)+people)>(CAPACITY+GAP);   // fascia piena
+      var bloccato=passato||full;
+      if(!bloccato) disponibili++;
       var el=document.createElement("div");
-      el.className="slot"+(full?" full":"");
-      el.innerHTML=full?(slot+'<span class="tag">esaurito</span>'):slot;
-      if(!full){el.addEventListener("click",function(){
+      el.className="slot"+(bloccato?" full":"");
+      el.innerHTML=bloccato?(slot+'<span class="tag">'+(passato?"passato":"esaurito")+'</span>'):slot;
+      if(!bloccato){el.addEventListener("click",function(){
         var s=document.querySelectorAll(".slot.sel"); for(var i=0;i<s.length;i++)s[i].classList.remove("sel");
         el.classList.add("sel"); slotInput.value=slot; validate();
       });}
       row.appendChild(el);
     });
     slotsEl.appendChild(row);
+    if(oggi && disponibili===0){
+      var fn=document.createElement("div"); fn.className="slot-note"; fn.style.marginTop="10px";
+      fn.textContent="Per oggi il pranzo è concluso. Scegli un altro giorno.";
+      slotsEl.appendChild(fn);
+    }
     validate();
   }
 
@@ -377,6 +398,12 @@ window.LP_CONFIG = (function () {
     if(!validate()){errEl.textContent="Compila tutti i campi e accetta l'informativa privacy per confermare.";return;}
     errEl.textContent="";
     var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim(),email=emailEl.value.trim();
+    // Sicurezza: rifiuta data passata o orario di oggi ormai trascorso
+    var nowc=new Date();
+    if(date<iso(nowc) || (date===iso(nowc) && slotMin(slot)<=nowc.getHours()*60+nowc.getMinutes())){
+      errEl.textContent="Il giorno o l'orario scelto è già passato. Aggiorna la selezione.";
+      renderSlots(); return;
+    }
     /* >>> Salva la prenotazione su Google Sheet (se configurato l'URL). <<< */
     if(SHEET_URL){
       try{
