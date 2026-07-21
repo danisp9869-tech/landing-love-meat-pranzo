@@ -243,16 +243,24 @@ img{max-width:100%;display:block}
       <input type="date" id="data" required>
     </div>
     <div class="field">
-      <label for="persone">2 · Quante persone</label>
+      <label for="menu">2 · Cosa vuoi mangiare</label>
+      <select id="menu" required>
+        <option value="Grigliata (Tagliere di carne) — 19,90€">Grigliata · Tagliere di carne — 19,90€</option>
+        <option value="Piatto Tris — 13€">Piatto Tris — 13€</option>
+        <option value="Non lo so ancora">Non lo so ancora</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="persone">3 · Quante persone</label>
       <select id="persone" required></select>
     </div>
     <div class="field">
-      <label>3 · Orario</label>
+      <label>4 · Orario</label>
       <div class="slots" id="slots"></div>
       <input type="hidden" id="orario">
     </div>
     <div class="field">
-      <label for="nome">4 · Il tuo nome</label>
+      <label for="nome">5 · Il tuo nome</label>
       <input type="text" id="nome" autocomplete="name" placeholder="Nome e cognome" required>
     </div>
     <div class="field">
@@ -322,7 +330,7 @@ window.LP_CONFIG = (function () {
   var BOOKED = C.booked || {};
   var SHEET_URL = C.googleSheetsWebAppUrl || "";
   var $ = function (id) { return document.getElementById(id); };
-  var dateEl=$("data"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
+  var dateEl=$("data"),menuEl=$("menu"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
       nameEl=$("nome"),phoneEl=$("telefono"),emailEl=$("email"),privacyEl=$("privacy"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
 
   var today=new Date(); today.setHours(0,0,0,0);
@@ -397,7 +405,7 @@ window.LP_CONFIG = (function () {
   function submit(){
     if(!validate()){errEl.textContent="Compila tutti i campi e accetta l'informativa privacy per confermare.";return;}
     errEl.textContent="";
-    var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim(),email=emailEl.value.trim();
+    var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),tel=phoneEl.value.trim(),email=emailEl.value.trim(),menu=menuEl.value;
     // Sicurezza: rifiuta data passata o orario di oggi ormai trascorso
     var nowc=new Date();
     if(date<iso(nowc) || (date===iso(nowc) && slotMin(slot)<=nowc.getHours()*60+nowc.getMinutes())){
@@ -412,7 +420,7 @@ window.LP_CONFIG = (function () {
           mode:"no-cors",
           headers:{"Content-Type":"text/plain;charset=utf-8"},
           body:JSON.stringify({
-            data:fmtDate(date), ora:slot, persone:people,
+            data:fmtDate(date), ora:slot, persone:people, formula:menu,
             nome:nome, telefono:tel, email:email, creata:new Date().toLocaleString("it-IT")
           })
         }).catch(function(){});
@@ -426,6 +434,7 @@ window.LP_CONFIG = (function () {
       '<p>Ti aspettiamo da I Love Meat per la pausa pranzo. Se serve ti chiamiamo per confermare.</p>'+
       '<div class="det">'+
         '<div><span>Giorno:</span> '+fmtDate(date)+'</div>'+
+        '<div><span>Formula:</span> '+menu+'</div>'+
         '<div><span>Persone:</span> '+people+'</div>'+
         '<div><span>Orario:</span> '+slot+'</div>'+
         '<div><span>A nome di:</span> '+nome+'</div>'+
