@@ -198,6 +198,50 @@ a{color:inherit}
 .foot .logo{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:18px;color:var(--text);letter-spacing:.02em}
 .foot a{color:var(--muted);text-decoration:none}
 .foot a:hover{color:var(--red)}
+/* ---- MOBILE: +3px su tutti i testi ----
+   Blocco unico e in fondo, così si ritocca (o si toglie) da un punto solo.
+   I titoloni display non sono qui: usano clamp() con i vw e scalano già. */
+@media (max-width:600px){
+  .kicker{font-size:16px}
+  .badge{font-size:15px}
+  .stars{font-size:17px}
+  .hero .lead{font-size:20px}
+  .hero .rate{font-size:17px}
+  .hero .cta-row .btn{font-size:22px}
+  .nav .btn{font-size:17px}
+  .btn{font-size:21px}
+  .perk b{font-size:29px}
+  .perk span{font-size:15.5px}
+  .sec-head p{font-size:20px}
+  .offer .pick{font-size:13.5px}
+  .offer .desc{font-size:19px}
+  .offer .list li{font-size:18px}
+  .offer .fine{font-size:15px}
+  .step .n{font-size:37px}
+  .step h4{font-size:20px}
+  .step p{font-size:17.5px}
+  .split p{font-size:19.5px}
+  .vino{font-size:19px}
+  .review .quote{font-size:23px}
+  .review .who{font-size:17px}
+  .review .stat span{font-size:16px}
+  .hours .row{font-size:18px}
+  .book-head p{font-size:19px}
+  .field label{font-size:16px}
+  .field input,.field select{font-size:19px}
+  .slot{font-size:18px}
+  .slot .tag{font-size:13px}
+  .slot-group-label{font-size:15px}
+  .slot-note{font-size:15.5px}
+  .privacy{font-size:16px}
+  .cta{font-size:24px}
+  .err{font-size:16px}
+  .success h3{font-size:29px}
+  .success p{font-size:18px}
+  .success .det{font-size:18px}
+  .success .again{font-size:17px}
+  .foot{font-size:16.5px}
+}
 </style>
 
 <!-- Meta Pixel Code -->
