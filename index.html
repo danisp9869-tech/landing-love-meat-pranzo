@@ -176,6 +176,9 @@ a{color:inherit}
 .privacy{display:flex;align-items:flex-start;gap:10px;margin:2px 0 16px;color:var(--muted);font-size:13px;line-height:1.45;cursor:pointer}
 .privacy input{flex:0 0 auto;width:18px;height:18px;margin-top:1px;accent-color:var(--red);cursor:pointer}
 .privacy a{color:var(--red);text-decoration:underline}
+/* Secondo consenso, FACOLTATIVO: staccato da quello obbligatorio e un filo più
+   tenue, così non viene letto come un secondo obbligo per prenotare. */
+.privacy.optional{margin-top:-8px;padding-top:12px;border-top:1px solid rgba(128,120,112,.32);opacity:.85}
 /* il bottone del form resta il più grande della pagina: è l'unica azione che conta qui */
 .cta{display:block;width:100%;text-align:center;padding:15px;border:none;border-radius:12px;background:var(--red);color:#fff;font-size:21px;font-weight:400;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;font-family:"Anton","Arial Narrow",sans-serif;box-shadow:0 6px 16px rgba(209,40,31,.28)}
 .cta:hover{background:var(--red-2)}
@@ -463,6 +466,12 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         <span>Ho letto e accetto l'<a href="privacy.html" target="_blank" rel="noopener">informativa sulla privacy</a> e acconsento al trattamento dei dati per gestire la prenotazione.</span>
       </label>
 
+      <!-- Consenso marketing FACOLTATIVO: non entra nella validazione, il tasto resta attivo -->
+      <label class="privacy optional" for="marketing">
+        <input type="checkbox" id="marketing">
+        <span>Desidero ricevere offerte e novità da I Love Meat via email. Facoltativo, posso disiscrivermi quando voglio.</span>
+      </label>
+
       <button class="cta" id="cta" disabled>Blocca l'offerta e prenota</button>
       <div class="err" id="err"></div>
     </div>
@@ -544,7 +553,7 @@ window.LP_CONFIG = (function () {
   var $ = function (id) { return document.getElementById(id); };
   var dateEl=$("data"),menuEl=$("menu"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
       nameEl=$("nome"),phoneEl=$("telefono"),emailEl=$("email"),
-      privacyEl=$("privacy"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
+      privacyEl=$("privacy"),marketingEl=$("marketing"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
 
   var today=new Date(); today.setHours(0,0,0,0);
   var iso=function(d){var m=d.getMonth()+1,g=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(g<10?"0":"")+g;};
@@ -641,7 +650,9 @@ window.LP_CONFIG = (function () {
           headers:{"Content-Type":"text/plain;charset=utf-8"},
           body:JSON.stringify({
             data:fmtDate(date), ora:slot, persone:people, formula:menu,
-            nome:nome, telefono:tel, email:email, creata:new Date().toLocaleString("it-IT")
+            nome:nome, telefono:tel, email:email,
+            privacy:(privacyEl.checked?"Sì":"No"), marketing:(marketingEl.checked?"Sì":"No"),
+            creata:new Date().toLocaleString("it-IT")
           })
         }).catch(function(){});
       }catch(e){}
