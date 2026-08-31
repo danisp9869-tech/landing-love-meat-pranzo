@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>I Love Meat · Pianezza — La pausa pranzo di chi lavora: Tris 13€ o Tagliere 19,90€</title>
-<meta name="description" content="Pausa pranzo per chi lavora a Pianezza. Piatto Tris completo a 13€ con acqua e caffè inclusi, o Tagliere di carne 4 pezzi a scelta a 19,90€. Servito veloce, Lun–Ven 12:00–14:30. Prenota e salti la fila.">
+<title>I Love Meat · Pianezza — La pausa pranzo di chi lavora: Piatto Tris a 13€</title>
+<meta name="description" content="Pausa pranzo per chi lavora a Pianezza. Piatto Tris completo a 13€ con primo, secondo, contorno, acqua e caffè inclusi. Servito veloce, Lun–Ven 12:00–14:30. Prenota e salti la fila.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,7 @@
   --bg:#0a0908;--bg2:#141010;--card:#1a1512;--card2:#211a16;--line:#2c2420;
   --text:#f2ede6;--muted:#9a9088;
   --red:#d1281f;--red-2:#e8402f;--red-d:#a91b14;
+  --senape:#e0a82e;
   --radius:16px
 }
 html{scroll-behavior:smooth}
@@ -50,7 +51,9 @@ a{color:inherit}
 /* alone rosso appena accennato: sopra la foto non deve colorare la carne */
 .hero-glow{position:absolute;z-index:1;left:50%;top:30%;transform:translate(-50%,-50%);width:min(780px,92vw);height:380px;background:radial-gradient(ellipse at center,rgba(209,40,31,.16),transparent 68%);filter:blur(14px);pointer-events:none}
 .hero-inner{position:relative;z-index:2;max-width:1120px}
-.hero .badge{margin-bottom:18px;background:rgba(10,9,8,.55);backdrop-filter:blur(4px)}
+.hero .badge{margin-bottom:18px;background:rgba(10,9,8,.55);backdrop-filter:blur(4px);color:var(--senape);border-color:rgba(224,168,46,.5)}
+.hero .badge .dot{background:var(--senape);box-shadow:0 0 0 0 rgba(224,168,46,.6);animation:pulse-senape 1.8s infinite}
+@keyframes pulse-senape{0%{box-shadow:0 0 0 0 rgba(224,168,46,.5)}70%{box-shadow:0 0 0 7px rgba(224,168,46,0)}100%{box-shadow:0 0 0 0 rgba(224,168,46,0)}}
 .hero h1{font-size:clamp(50px,9.5vw,150px);text-shadow:0 4px 34px rgba(0,0,0,.65)}
 .hero h1 .l2{color:var(--red)}
 .hero .lead{color:#eadfd4;font-size:19px;max-width:46ch;margin:24px auto 32px;text-shadow:0 2px 16px rgba(0,0,0,.8)}
@@ -76,30 +79,38 @@ a{color:inherit}
 .perk span{display:block;color:var(--muted);font-size:12.5px;margin-top:6px;line-height:1.35}
 @media (max-width:760px){.perks{grid-template-columns:1fr 1fr}}
 
-/* ---- OFFERTE (due card) ---- */
+/* ---- OFFERTA (box grande in risalto, stile I Love Meat) ---- */
 .section{padding:36px 0}
 .sec-head{text-align:center;margin-bottom:26px}
 .sec-head h2{font-size:clamp(30px,5.4vw,58px);margin-top:6px}
 .sec-head h2 .l2{color:var(--red)}
 .sec-head p{color:var(--muted);font-size:17px;max-width:52ch;margin:12px auto 0}
-.offers{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
-@media (max-width:760px){.offers{grid-template-columns:1fr}}
-.offer{position:relative;background:linear-gradient(160deg,#241813,#140f0d 70%);border:1px solid rgba(209,40,31,.3);border-radius:24px;padding:44px 26px 34px;text-align:center;overflow:hidden;display:flex;flex-direction:column}
-.offer::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(209,40,31,.16),transparent 60%);pointer-events:none}
-.offer.best{border-color:rgba(209,40,31,.75);box-shadow:0 14px 44px rgba(209,40,31,.14)}
-.offer .pick{position:absolute;top:14px;left:50%;transform:translateX(-50%);padding:5px 14px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;background:rgba(209,40,31,.16);border:1px solid rgba(209,40,31,.5);color:var(--red)}
-.offer.best .pick{background:var(--red);border-color:var(--red);color:#fff}
-.offer h3{font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(26px,4vw,38px);line-height:1;margin:14px 0 10px}
-.offer .price{font-family:"Anton",sans-serif;color:var(--red);font-size:clamp(54px,9vw,84px);line-height:.9;margin:6px 0 4px}
-.offer .price small{display:inline-block;font-family:"Inter",sans-serif;color:var(--muted);font-size:14px;font-weight:600;margin-left:6px;vertical-align:middle}
-.offer .desc{color:var(--muted);font-size:16px;max-width:34ch;margin:8px auto 0}
+/* box orizzontale: testo a sinistra, foto a destra. Bordo rosso spesso, glow e ombra
+   profonda per farlo staccare dal resto della pagina — come nelle altre landing. */
+.offer{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;background:linear-gradient(160deg,#241813,#140f0d 70%);border:2px solid rgba(209,40,31,.55);border-radius:24px;padding:44px 34px;text-align:left;overflow:hidden;box-shadow:0 0 0 1px rgba(209,40,31,.12),0 24px 60px rgba(0,0,0,.5)}
+.offer::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(209,40,31,.18),transparent 60%);pointer-events:none}
+.offer-testo{position:relative;z-index:1}
+.offer .pick{display:inline-block;margin-bottom:16px;padding:6px 15px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:#fff}
+.offer h3{font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(40px,6.6vw,74px);line-height:.9;margin:0 0 14px}
+.offer .desc{color:var(--muted);font-size:17px;max-width:44ch;margin:0 0 22px}
 .offer .desc b{color:#fff}
-.offer .list{list-style:none;margin:18px auto 0;text-align:left;max-width:30ch;display:grid;gap:9px}
-.offer .list li{position:relative;padding-left:26px;color:var(--text);font-size:15px}
-.offer .list li::before{content:"✓";position:absolute;left:0;top:-1px;color:var(--red);font-weight:800}
-.offer .spacer{flex:1}
-.offer .btn{margin-top:24px;align-self:center}
+.offer .list{list-style:none;margin:0 0 24px;display:grid;gap:9px;max-width:34ch}
+.offer .list li{position:relative;padding-left:28px;color:var(--text);font-size:16px;font-weight:600}
+.offer .list li::before{content:"✓";position:absolute;left:0;top:-1px;color:var(--red);font-size:18px;font-weight:800}
+.offer .price{font-family:"Anton",sans-serif;color:var(--senape);font-size:clamp(64px,11vw,104px);line-height:.85;margin:0}
+.offer .price small{display:inline-block;font-family:"Inter",sans-serif;color:var(--muted);font-size:15px;font-weight:600;margin-left:8px;vertical-align:middle}
+.offer .btn{margin-top:24px}
 .offer .fine{margin-top:14px;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.offer-foto{position:relative;z-index:1;border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:360px}
+.offer-foto img{width:100%;height:100%;object-fit:cover}
+/* mobile: le due colonne si impilano, testo centrato e foto sopra al testo */
+@media (max-width:760px){
+  .offer{grid-template-columns:1fr;gap:24px;padding:36px 20px;border-radius:20px;text-align:center}
+  .offer .desc{margin:0 auto 22px}
+  .offer .list{margin-left:auto;margin-right:auto;text-align:left}
+  .offer .btn{width:100%;max-width:360px}
+  .offer-foto{min-height:230px;order:-1}
+}
 
 /* ---- COME FUNZIONA ---- */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -285,14 +296,14 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
 
 <!-- HERO -->
 <header class="hero">
-  <img class="hero-bg" src="assets/tagliata-brace.jpg" alt="Tagliata di carne alla brace affettata sul tagliere" onerror="this.style.display='none'">
+  <img class="hero-bg" src="assets/tagliata-brace.jpg" alt="Carne alla brace del menu pranzo I Love Meat" onerror="this.style.display='none'">
   <span class="hero-glow"></span>
   <div class="wrap hero-inner">
-    <span class="badge"><span class="dot"></span>Lun–Ven · 12:00–14:30</span>
+    <span class="badge"><span class="dot"></span>Lavoratore di Pianezza</span>
     <h1 class="display">Hai un'ora.<br><span class="l2">Mangia sul serio.</span></h1>
-    <p class="lead">La pausa pranzo di chi lavora a Pianezza: <b>carne vera, servita in fretta</b>. Ti siedi, mangi come si deve e torni in ufficio in orario, spendendo quello che spendi già per un panino triste.</p>
+    <p class="lead">La pausa pranzo da I Love Meat ormai è una tradizione: chi si ferma la prima volta ritorna ogni giorno. Al posto del solito panino triste <b>mangi al ristorante e spendi uguale</b>.</p>
     <div class="cta-row">
-      <a class="btn" href="#book">Prenota il tuo posto</a>
+      <a class="btn" href="#book">Prenota il Piatto Tris a 13€</a>
       <div class="rate"><span class="stars">★★★★★</span><br><b>4.9</b> · 500+ recensioni</div>
     </div>
   </div>
@@ -314,58 +325,28 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
 <section class="section">
   <div class="wrap">
     <div class="sec-head">
-      <span class="kicker">Le due formule</span>
-      <h2 class="display">Poco tempo<br><span class="l2">o tanta fame?</span></h2>
-      <p>Due modi di fare pausa sul serio. Scegli quando prenoti, o decidi al tavolo.</p>
+      <span class="kicker">La formula</span>
+      <h2 class="display">Un pranzo vero<br><span class="l2">a 13 euro.</span></h2>
+      <p>Prenota un pranzo vero, lo trovi solo da I Love Meat a Pianezza.</p>
     </div>
 
-    <div class="offers">
-      <div class="offer best">
-        <span class="pick">Il più veloce</span>
+    <div class="offer">
+      <div class="offer-testo">
+        <span class="pick">Il più richiesto</span>
         <h3>Piatto Tris</h3>
-        <div class="price">13€<small>a persona</small></div>
-        <p class="desc">Primo, secondo e contorno. <b>Acqua e caffè inclusi.</b></p>
+        <p class="desc">Primo, secondo e contorno. <b>Acqua e caffè inclusi</b>, e il vino te lo offriamo noi.</p>
         <ul class="list">
           <li>Pasto completo, conto senza sorprese</li>
           <li>Pronto in pochi minuti</li>
           <li>Perfetto se hai la pausa contata</li>
         </ul>
-        <div class="spacer"></div>
+        <div class="price">13€<small>a persona</small></div>
         <a class="btn" href="#book">Prenoto il Tris</a>
         <div class="fine">Solo a pranzo · Lun–Ven</div>
       </div>
-
-      <div class="offer">
-        <span class="pick">Il più goloso</span>
-        <h3>Tagliere di Carne</h3>
-        <div class="price">19,90€<small>a persona</small></div>
-        <p class="desc"><b>4 pezzi a scelta</b> al banco: te lo componi tu, come piace a te.</p>
-        <ul class="list">
-          <li>Scegli i tagli guardandoli</li>
-          <li>Cottura alla brace come si deve</li>
-          <li>Per quando la fame è quella vera</li>
-        </ul>
-        <div class="spacer"></div>
-        <a class="btn" href="#book">Prenoto il Tagliere</a>
-        <div class="fine">Solo a pranzo · Lun–Ven</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COME FUNZIONA I LOVE MEAT (il banco) -->
-<section class="section">
-  <div class="wrap">
-    <div class="split banco">
-      <div class="shot">
-        <img src="assets/banco-carne.jpg" alt="Il banco di I Love Meat con spiedini, salsiccia, costine e tagli di carne pronti da scegliere" loading="lazy" onerror="this.parentNode.style.display='none'">
-      </div>
-      <div>
-        <span class="kicker">Il banco</span>
-        <h2 class="display">Come funziona<br><span class="l2">I Love Meat</span></h2>
-        <p>Componi a scelta il tuo tagliere: vai al banco e <b>scegli 4 pezzi</b>, quelli che vuoi tu. Li vedi, li indichi, e vanno sulla brace.</p>
-        <p class="vino"><span class="pin">🍷</span> <b>Il vino te lo offriamo noi.</b></p>
-      </div>
+      <figure class="offer-foto">
+        <img src="assets/offerta-pranzo.jpg" alt="Piatto Tris del menu pranzo I Love Meat: primo, secondo e contorno" loading="lazy" onerror="this.parentNode.style.display='none'">
+      </figure>
     </div>
   </div>
 </section>
@@ -406,11 +387,11 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         <span class="kicker">Perché noi</span>
         <h2 class="display">Il panino<br><span class="l2">non è un pranzo</span></h2>
         <p>Mezz'ora in piedi davanti al bar, un tramezzino gommoso e alle tre sei già a pezzi. <b>Costa uguale, ma non è la stessa cosa.</b></p>
-        <p>Da noi ti siedi e in pochi minuti hai davanti <span class="hl">carne cotta come si deve</span>: il <b>Piatto Tris a 13€</b> se vai di corsa, che mette insieme primo, secondo, contorno, acqua e caffè, oppure il <b>Tagliere a 19,90€</b> se hai fame per davvero.</p>
+        <p>Da noi ti siedi e in pochi minuti hai davanti <span class="hl">un menu completo</span> con <b>primo, secondo, contorno, acqua e caffè a 13€</b>.</p>
         <p>Siamo a <b>Largo II Giugno 2, Pianezza</b>: parcheggi, mangi, torni al lavoro. Anche per pranzi di lavoro e gruppi dell'ufficio, quindi dicci quanti siete e prepariamo il tavolo.</p>
       </div>
       <div class="shot">
-        <img src="assets/offerta-pranzo.jpg" alt="Grigliata mista con contorno del menu pranzo I Love Meat" loading="lazy" onerror="this.parentNode.style.display='none'">
+        <img src="assets/banco-carne.jpg" alt="Il banco di I Love Meat con i tagli di carne pronti da cuocere alla brace" loading="lazy" onerror="this.parentNode.style.display='none'">
       </div>
     </div>
   </div>
@@ -431,25 +412,16 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         <input type="date" id="data" required>
       </div>
       <div class="field">
-        <label for="menu">2 · Cosa vuoi mangiare</label>
-        <!-- i "value" devono restare identici a index.html: finiscono nella stessa colonna del foglio -->
-        <select id="menu" required>
-          <option value="Piatto Tris — 13€">Piatto Tris — 13€</option>
-          <option value="Grigliata (Tagliere di carne) — 19,90€">Grigliata · Tagliere di carne — 19,90€</option>
-          <option value="Non lo so ancora">Non lo so ancora</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="persone">3 · Quante persone</label>
+        <label for="persone">2 · Quante persone</label>
         <select id="persone" required></select>
       </div>
       <div class="field">
-        <label>4 · Orario</label>
+        <label>3 · Orario</label>
         <div class="slots" id="slots"></div>
         <input type="hidden" id="orario">
       </div>
       <div class="field">
-        <label for="nome">5 · Il tuo nome</label>
+        <label for="nome">4 · Il tuo nome</label>
         <input type="text" id="nome" autocomplete="name" placeholder="Nome e cognome" required>
       </div>
       <div class="field">
@@ -533,7 +505,7 @@ window.LP_CONFIG = (function () {
     // Pranzo I Love Meat: Lun–Ven 12:00–14:30 · Sabato e domenica pranzo chiuso
     lunch: ["12:00","12:30","13:00","13:30","14:00","14:30"],
     closedDays: [0,6],   // 0=dom … 6=sab → pranzo chiuso sabato e domenica
-    offerName: "Menu Pranzo · Tris 13€ o Tagliere 19,90€",
+    offerName: "Menu Pranzo · Piatto Tris 13€",
     // Web App di Google Apps Script (finisce con /exec). Vuoto = nessun invio.
     googleSheetsWebAppUrl: "https://script.google.com/macros/s/AKfycbwf02q9O3OMNIMNrTGvAkg795RCR_zHV3sNFzz_BZoKtZ0bkWwUmudXWC4YanqQaNCC/exec",
     booked: booked
@@ -551,7 +523,7 @@ window.LP_CONFIG = (function () {
   var BOOKED = C.booked || {};
   var SHEET_URL = C.googleSheetsWebAppUrl || "";
   var $ = function (id) { return document.getElementById(id); };
-  var dateEl=$("data"),menuEl=$("menu"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
+  var dateEl=$("data"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
       nameEl=$("nome"),phoneEl=$("telefono"),emailEl=$("email"),
       privacyEl=$("privacy"),marketingEl=$("marketing"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
 
@@ -632,7 +604,7 @@ window.LP_CONFIG = (function () {
     if(!validate()){errEl.textContent="Compila tutti i campi e accetta l'informativa privacy per confermare.";return;}
     errEl.textContent="";
     var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),
-        tel=phoneEl.value.trim(),email=emailEl.value.trim(),menu=menuEl.value;
+        tel=phoneEl.value.trim(),email=emailEl.value.trim(),menu="Piatto Tris — 13€";
 
     // Sicurezza: rifiuta data passata o orario di oggi ormai trascorso
     var nowc=new Date();
@@ -685,7 +657,6 @@ window.LP_CONFIG = (function () {
   dateEl.addEventListener("focus",openDatePicker);
 
   dateEl.addEventListener("change",function(){startCheckout();renderSlots();});
-  menuEl.addEventListener("change",startCheckout);
   peopleEl.addEventListener("change",function(){startCheckout();renderSlots();});
   nameEl.addEventListener("input",function(){startCheckout();validate();});
   phoneEl.addEventListener("input",function(){startCheckout();validate();});
