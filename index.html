@@ -562,8 +562,10 @@ window.LP_CONFIG = (function () {
     lunch: ["12:00","12:30","13:00","13:30","14:00","14:30"],
     closedDays: [0,6],   // 0=dom … 6=sab → pranzo chiuso sabato e domenica
     offerName: "Menu Pranzo · Piatto Tris 13€",
-    // Web App di Google Apps Script (finisce con /exec). Vuoto = nessun invio.
-    googleSheetsWebAppUrl: "https://script.google.com/macros/s/AKfycbwf02q9O3OMNIMNrTGvAkg795RCR_zHV3sNFzz_BZoKtZ0bkWwUmudXWC4YanqQaNCC/exec",
+    // "tipologia" scritta sul foglio e mostrata nell'email al ristoratore
+    offerTag: "Pranzo",
+    // Web App di Google Apps Script (finisce con /exec): STESSO foglio delle bombette. Vuoto = nessun invio.
+    googleSheetsWebAppUrl: "https://script.google.com/macros/s/AKfycbyCVTPWs0z8ZCcdUy3e2j_WC8bWwWa2U4u-LCbhEfsFxL3ErGv2zX8V0OzVZi_Rl6j0Zg/exec",
     booked: booked
   };
 })();
@@ -578,6 +580,7 @@ window.LP_CONFIG = (function () {
   var CLOSED = C.closedDays || [0,6];
   var BOOKED = C.booked || {};
   var SHEET_URL = C.googleSheetsWebAppUrl || "";
+  var OFFER_TAG = C.offerTag || "Pranzo";   // tipologia inviata al foglio/email
   var $ = function (id) { return document.getElementById(id); };
   var dateEl=$("data"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
       nameEl=$("nome"),phoneEl=$("telefono"),emailEl=$("email"),
@@ -669,18 +672,19 @@ window.LP_CONFIG = (function () {
       renderSlots(); return;
     }
 
-    /* Salva la prenotazione su Google Sheet (se configurato l'URL). */
+    /* Salva la prenotazione sullo STESSO Google Sheet delle bombette (Apps Script).
+       Stesso formato del payload bombette: URLSearchParams + campo "offerta" = tipologia
+       (qui "Pranzo"), così sul foglio e nell'email al ristoratore esce come tipologia Pranzo. */
     if(SHEET_URL){
       try{
         fetch(SHEET_URL,{
           method:"POST",
           mode:"no-cors",
-          headers:{"Content-Type":"text/plain;charset=utf-8"},
-          body:JSON.stringify({
-            data:fmtDate(date), ora:slot, persone:people, formula:menu,
-            nome:nome, telefono:tel, email:email,
+          body:new URLSearchParams({
+            data:date, ora:slot, persone:people,
+            nome:nome, telefono:tel, email:email, richieste:"",
             privacy:(privacyEl.checked?"Sì":"No"), marketing:(marketingEl.checked?"Sì":"No"),
-            creata:new Date().toLocaleString("it-IT")
+            offerta:OFFER_TAG
           })
         }).catch(function(){});
       }catch(e){}
