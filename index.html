@@ -56,7 +56,14 @@ a{color:inherit}
 @keyframes pulse-senape{0%{box-shadow:0 0 0 0 rgba(224,168,46,.5)}70%{box-shadow:0 0 0 7px rgba(224,168,46,0)}100%{box-shadow:0 0 0 0 rgba(224,168,46,0)}}
 .hero h1{font-size:clamp(50px,9.5vw,150px);text-shadow:0 4px 34px rgba(0,0,0,.65)}
 .hero h1 .l2{color:var(--red)}
-.hero .lead{color:#eadfd4;font-size:19px;max-width:46ch;margin:24px auto 32px;text-shadow:0 2px 16px rgba(0,0,0,.8)}
+/* riga prezzo dell'offerta nell'hero: 13€ grande come il titolo (senape), accanto
+   il prezzo barrato "da 26€" e "tutto incluso" impilati */
+.hero .hero-price{display:flex;align-items:center;justify-content:center;gap:18px;margin:14px auto 0;text-shadow:0 2px 16px rgba(0,0,0,.8)}
+.hero .hero-price .now{font-family:"Anton","Arial Narrow",sans-serif;font-weight:400;color:var(--senape);font-size:clamp(66px,12.5vw,188px);line-height:.85}
+.hero .hero-price .side{display:flex;flex-direction:column;align-items:flex-start;font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;line-height:1.12}
+.hero .hero-price .side s{color:var(--muted);font-size:clamp(24px,4.2vw,48px);text-decoration-thickness:3px}
+.hero .hero-price .side .ti{color:#fff;font-size:clamp(28px,4.8vw,56px)}
+.hero .lead{color:#eadfd4;font-size:19px;max-width:46ch;margin:20px auto 32px;text-shadow:0 2px 16px rgba(0,0,0,.8)}
 .hero .lead b{color:#fff}
 .hero .cta-row{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
 .hero .rate{font-size:13.5px;color:#cfc6bc;text-shadow:0 1px 10px rgba(0,0,0,.8)}
@@ -241,7 +248,7 @@ a{color:inherit}
 .book .privacy.optional{border-top-color:#e5ded5}
 .book .success h3{color:#1c1712}
 .book .success p{color:#5f574f}
-.book .success .det{background:#f5f1ec;border-color:#ddd5ca}
+.book .success .det{background:#f5f1ec;border-color:#ddd5ca;color:#1c1712}
 .book .success .det span{color:#8a8078}
 
 /* ---- SUCCESS ---- */
@@ -348,7 +355,11 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
   <span class="hero-glow"></span>
   <div class="wrap hero-inner">
     <span class="badge"><span class="dot"></span>Lavoratore di Pianezza</span>
-    <h1 class="display">Hai un'ora.<br><span class="l2">Mangia sul serio.</span></h1>
+    <h1 class="display">Pranzo completo:<br><span class="l2">primo, secondo e contorno</span></h1>
+    <div class="hero-price">
+      <b class="now">13€</b>
+      <span class="side"><s>da 26€</s><span class="ti">tutto incluso</span></span>
+    </div>
     <p class="lead">La pausa pranzo da I Love Meat ormai è una tradizione: chi si ferma la prima volta ritorna ogni giorno. Al posto del solito panino triste <b>mangi al ristorante e spendi uguale</b>.</p>
     <div class="cta-row">
       <a class="btn" href="#book">Prenota il Piatto Tris a 13€</a>
@@ -696,7 +707,7 @@ window.LP_CONFIG = (function () {
     bookEl.innerHTML=
       '<div class="success"><div class="ok">✓</div>'+
       '<h3>Pranzo prenotato, '+nome.split(" ")[0]+'!</h3>'+
-      '<p>Ti aspettiamo da I Love Meat per la pausa pranzo. Se serve ti chiamiamo per confermare.</p>'+
+      '<p>Ti aspettiamo da I Love Meat per la tua pausa pranzo, ti abbiamo riservato il miglior posto.</p>'+
       '<div class="det">'+
         '<div><span>Giorno:</span> '+fmtDate(date)+'</div>'+
         '<div><span>Formula:</span> '+menu+'</div>'+
