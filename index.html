@@ -66,6 +66,7 @@ a{color:inherit}
 .hero .lead{color:#eadfd4;font-size:19px;max-width:46ch;margin:20px auto 32px;text-shadow:0 2px 16px rgba(0,0,0,.8)}
 .hero .lead b{color:#fff}
 .hero .cta-row{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.hero .hero-coupon{margin:0 auto 16px;color:var(--senape);font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:16px;text-shadow:0 2px 12px rgba(0,0,0,.8)}
 .hero .rate{font-size:13.5px;color:#cfc6bc;text-shadow:0 1px 10px rgba(0,0,0,.8)}
 .hero .rate b{color:#fff}
 @media (max-width:600px){
@@ -108,6 +109,8 @@ a{color:inherit}
 .offer .price small{display:inline-block;font-family:"Inter",sans-serif;color:var(--muted);font-size:15px;font-weight:600;margin-left:8px;vertical-align:middle}
 .offer .btn{margin-top:24px}
 .offer .fine{margin-top:14px;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+/* disponibilità coupon sotto la CTA del box offerta */
+.offer .coupon-avail{margin-top:12px;color:var(--red);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
 .offer-foto{position:relative;z-index:1;border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:360px}
 .offer-foto img{width:100%;height:100%;object-fit:cover}
 /* variante senza foto: box a colonna singola, contenuto centrato */
@@ -176,6 +179,7 @@ a{color:inherit}
 .book-head{text-align:center;margin-bottom:26px}
 .book-head h2{font-size:clamp(30px,5.4vw,58px);margin-top:6px}
 .book-head p{color:var(--muted);font-size:16px;margin-top:10px}
+.book-head .book-coupon{color:var(--senape);font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:18px;margin-top:10px}
 .book{max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:600px){.grid2{grid-template-columns:1fr}}
@@ -346,7 +350,7 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
 <!-- NAV -->
 <nav class="nav">
   <div class="logo">I Love Meat<small>Pausa pranzo · Pianezza</small></div>
-  <a class="btn" href="#book">Prenota</a>
+  <a class="btn" href="#book">Riserva il coupon</a>
 </nav>
 
 <!-- HERO -->
@@ -361,8 +365,9 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
       <span class="side"><s>da 26€</s><span class="ti">tutto incluso</span></span>
     </div>
     <p class="lead">Da I Love Meat il pranzo è ormai una tradizione. Al posto del solito panino triste <b>goditi un pranzo vero</b>.</p>
+    <div class="hero-coupon">25 coupon disponibili</div>
     <div class="cta-row">
-      <a class="btn" href="#book">Prenota il Piatto Tris a 13€</a>
+      <a class="btn" href="#book">Riserva il coupon</a>
       <div class="rate"><span class="stars">★★★★★</span><br><b>4.9</b> · 500+ recensioni</div>
     </div>
   </div>
@@ -380,39 +385,13 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
   </div>
 </section>
 
-<!-- OFFERTE -->
-<section class="section">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="kicker">La formula</span>
-      <h2 class="display">Un pranzo vero<br><span class="l2">a 13 euro.</span></h2>
-      <p>Prenota un pranzo vero, lo trovi solo da I Love Meat a Pianezza.</p>
-    </div>
-
-    <div class="offer no-foto">
-      <div class="offer-testo">
-        <span class="pick">Il più richiesto</span>
-        <h3>Piatto Tris</h3>
-        <p class="desc"><b>Primo, secondo e contorno. Acqua e caffè te li offriamo noi.</b></p>
-        <ul class="list">
-          <li>Pranzo completo</li>
-          <li>Servizio veloce</li>
-          <li>Perfetto se vuoi mangiare bene ma hai poco tempo</li>
-        </ul>
-        <div class="price">13€<small>a persona</small></div>
-        <a class="btn" href="#book">Prenoto il Tris</a>
-        <div class="fine">Solo a pranzo · Lun–Ven</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- PRENOTAZIONE -->
 <section class="section book-sec">
   <div class="wrap">
     <div class="book-head">
       <span class="kicker">Prenota</span>
-      <h2 class="display">Blocca il tuo tavolo</h2>
+      <h2 class="display">Blocca il tuo tavolo e riserva il tuo coupon</h2>
+      <p class="book-coupon">Ancora pochi disponibili</p>
       <p>Ci vogliono 20 secondi. Salti la fila.</p>
     </div>
 
@@ -458,8 +437,36 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         <span>Acconsento a ricevere offerte, promozioni e comunicazioni commerciali del ristorante tramite i recapiti da me forniti, come indicato nell'<a href="https://www.iubenda.com/privacy-policy/46821789" class="iubenda-noiframe iubenda-embed" title="Informativa Privacy">Informativa Privacy</a>. Il consenso è facoltativo e può essere revocato in qualsiasi momento.</span>
       </label>
 
-      <button class="cta" id="cta" disabled>Blocca l'offerta e prenota</button>
+      <button class="cta" id="cta" disabled>Prenota e riserva coupon</button>
       <div class="err" id="err"></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFERTE -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">La formula</span>
+      <h2 class="display">Un pranzo vero<br><span class="l2">a 13 euro.</span></h2>
+      <p>Prenota un pranzo vero, lo trovi solo da I Love Meat a Pianezza.</p>
+    </div>
+
+    <div class="offer no-foto">
+      <div class="offer-testo">
+        <span class="pick">Il più richiesto</span>
+        <h3>Piatto Tris</h3>
+        <p class="desc"><b>Primo, secondo e contorno. Acqua e caffè te li offriamo noi.</b></p>
+        <ul class="list">
+          <li>Pranzo completo</li>
+          <li>Servizio veloce</li>
+          <li>Perfetto se vuoi mangiare bene ma hai poco tempo</li>
+        </ul>
+        <div class="price">13€<small>a persona</small></div>
+        <a class="btn" href="#book">Riserva il coupon</a>
+        <div class="coupon-avail">25 coupon disponibili</div>
+        <div class="fine">Solo a pranzo · Lun–Ven</div>
+      </div>
     </div>
   </div>
 </section>
@@ -488,7 +495,7 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         <p>Servizio rapido pensato per chi ha la pausa contata. Esci sazio e in orario.</p>
       </div>
     </div>
-    <div class="steps-cta"><a class="btn" href="#book">Prenota un tavolo</a></div>
+    <div class="steps-cta"><a class="btn" href="#book">Riserva il coupon</a></div>
   </div>
 </section>
 
@@ -530,7 +537,7 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
 <!-- CTA PRIMA DI "DOVE E QUANDO" -->
 <section class="section" style="padding-top:0">
   <div class="wrap">
-    <div class="steps-cta" style="margin-top:0"><a class="btn" href="#book">Prenota un tavolo</a></div>
+    <div class="steps-cta" style="margin-top:0"><a class="btn" href="#book">Riserva il coupon</a></div>
   </div>
 </section>
 
