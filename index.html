@@ -260,6 +260,8 @@ a{color:inherit}
 /* nota di disdetta: cortesia, non penale — fondo rosso appena acceso sul form bianco */
 .book .success .disdetta{margin-top:14px;padding:12px 14px;background:rgba(209,40,31,.06);border:1px solid rgba(209,40,31,.25);border-radius:10px;color:#5f574f;font-size:14px;line-height:1.5;text-align:left}
 .book .success .disdetta b{color:#1c1712}
+/* nota validità coupon sotto il titolo della conferma */
+.book .success .valid-note{margin-top:8px;color:var(--red);font-weight:700;font-size:14.5px}
 
 /* ---- SUCCESS ---- */
 .success{text-align:center;padding:8px 4px}
@@ -721,7 +723,8 @@ window.LP_CONFIG = (function () {
     bookEl.innerHTML=
       '<div class="success"><div class="ok">✓</div>'+
       '<h3>Pranzo prenotato, '+nome.split(" ")[0]+'!</h3>'+
-      '<p>Ti aspettiamo da I Love Meat per la tua pausa pranzo, ti abbiamo riservato il miglior posto.</p>'+
+      '<p>Il tuo tavolo è pronto, ti aspettiamo da I Love Meat per la tua pausa pranzo.</p>'+
+      '<p class="valid-note">Il coupon sarà valido solo per la data che hai inserito.</p>'+
       '<div class="det">'+
         '<div><span>Giorno:</span> '+fmtDate(date)+'</div>'+
         '<div><span>Formula:</span> '+menu+'</div>'+
