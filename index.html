@@ -184,6 +184,9 @@ a{color:inherit}
 .book-head p{color:var(--muted);font-size:16px;margin-top:10px}
 .book-head .book-coupon{color:var(--senape);font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:18px;margin-top:10px}
 .book{max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px}
+/* contenitore dell'embed Dinevo: stessa larghezza del form, centrato */
+.book-embed{max-width:560px;margin:0 auto}
+.book-embed iframe{display:block;width:100%}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:600px){.grid2{grid-template-columns:1fr}}
 .field{margin-bottom:16px}
@@ -404,51 +407,26 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
       <p>Ci vogliono 20 secondi. Salti la fila.</p>
     </div>
 
-    <div class="book" id="book" aria-label="Prenota il pranzo">
-      <div class="field">
-        <label>1 · Giorno</label>
-        <div class="date-wrap">
-          <button type="button" id="dataView" class="date-view placeholder"><span id="dataViewLabel">Scegli il giorno</span></button>
-          <div class="cal" id="cal" hidden></div>
-          <input type="date" id="data" required>
-        </div>
-      </div>
-      <div class="field">
-        <label for="persone">2 · Quante persone</label>
-        <select id="persone" required></select>
-      </div>
-      <div class="field">
-        <label>3 · Orario</label>
-        <div class="slots" id="slots"></div>
-        <input type="hidden" id="orario">
-      </div>
-      <div class="field">
-        <label for="nome">4 · Il tuo nome</label>
-        <input type="text" id="nome" autocomplete="name" placeholder="Nome e cognome" required>
-      </div>
-      <div class="field">
-        <label for="telefono">Telefono</label>
-        <input type="tel" id="telefono" autocomplete="tel" placeholder="Es. 345 688 1360" required>
-      </div>
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" autocomplete="email" placeholder="latua@email.it" required>
-      </div>
-
-      <label class="privacy" for="privacy">
-        <input type="checkbox" id="privacy" required>
-        <span>Ho letto e accetto l'<a href="https://www.iubenda.com/privacy-policy/46821789" class="iubenda-noiframe iubenda-embed" title="Informativa sulla Privacy">Informativa sulla Privacy</a>.</span>
-      </label>
-
-      <!-- Consenso marketing FACOLTATIVO: non entra nella validazione, il tasto resta attivo -->
-      <label class="privacy optional" for="marketing">
-        <input type="checkbox" id="marketing">
-        <span>Acconsento a ricevere offerte, promozioni e comunicazioni commerciali del ristorante tramite i recapiti da me forniti, come indicato nell'<a href="https://www.iubenda.com/privacy-policy/46821789" class="iubenda-noiframe iubenda-embed" title="Informativa Privacy">Informativa Privacy</a>. Il consenso è facoltativo e può essere revocato in qualsiasi momento.</span>
-      </label>
-
-      <button class="cta" id="cta" disabled>Prenota un tavolo</button>
-      <div class="err" id="err"></div>
+    <!-- Form di prenotazione Dinevo (embed) -->
+    <div class="book-embed">
+      <iframe
+        id="dinevo-booking"
+        src="https://api.dinevo.it/embed/r/est_e33a5577-5dea-4ff8-af37-250f70a276a0?promotion=promo_90c75268-424e-4748-9bc4-f6aaeb08c125"
+        title="Prenota un tavolo"
+        height="900"
+        style="width: 100%; border: 0; border-radius: 22px; overflow: hidden"
+      ></iframe>
     </div>
+    <script>
+      window.addEventListener('message', function (event) {
+        if (!event.data || event.data.type !== 'dinevo:booking-height') return;
+        var frame = document.getElementById('dinevo-booking');
+        if (!frame) return;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduce) frame.style.transition = 'height 0.2s ease';
+        frame.style.height = event.data.height + 'px';
+      });
+    </script>
   </div>
 </section>
 
@@ -576,250 +554,6 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
   </div>
 </footer>
 
-<script>
-/* ====== CONFIG: cambia SOLO questo blocco ====== */
-window.LP_CONFIG = (function () {
-  var booked = {}; // nessuna prenotazione simulata
-  return {
-    capacity: 60,        // coperti totali a pranzo
-    gap: 0,              // margine oltre la capienza (0 = mai overbooking)
-    phone: "+393456881360",
-    // Pranzo I Love Meat: Lun–Ven 12:00–14:30 · Sabato e domenica pranzo chiuso
-    lunch: ["12:00","12:30","13:00","13:30","14:00","14:30"],
-    closedDays: [0,6],   // 0=dom … 6=sab → pranzo chiuso sabato e domenica
-    offerName: "Menu Pranzo · Piatto Tris 13€",
-    // "tipologia" scritta sul foglio e mostrata nell'email al ristoratore
-    offerTag: "Pranzo",
-    // Web App di Google Apps Script (finisce con /exec): STESSO foglio delle bombette. Vuoto = nessun invio.
-    googleSheetsWebAppUrl: "https://script.google.com/macros/s/AKfycbyCVTPWs0z8ZCcdUy3e2j_WC8bWwWa2U4u-LCbhEfsFxL3ErGv2zX8V0OzVZi_Rl6j0Zg/exec",
-    booked: booked
-  };
-})();
-
-/* ====== LOGICA PRENOTAZIONE ====== */
-(function () {
-  var C = window.LP_CONFIG || {};
-  var CAPACITY = C.capacity != null ? C.capacity : 60;
-  var GAP = C.gap != null ? C.gap : 0;
-  var PHONE = C.phone || "+393456881360";
-  var LUNCH = C.lunch || ["12:00","12:30","13:00","13:30","14:00","14:30"];
-  var CLOSED = C.closedDays || [0,6];
-  var BOOKED = C.booked || {};
-  var SHEET_URL = C.googleSheetsWebAppUrl || "";
-  var OFFER_TAG = C.offerTag || "Pranzo";   // tipologia inviata al foglio/email
-  var $ = function (id) { return document.getElementById(id); };
-  var dateEl=$("data"),peopleEl=$("persone"),slotsEl=$("slots"),slotInput=$("orario"),
-      nameEl=$("nome"),phoneEl=$("telefono"),emailEl=$("email"),
-      privacyEl=$("privacy"),marketingEl=$("marketing"),ctaEl=$("cta"),errEl=$("err"),bookEl=$("book");
-
-  var today=new Date(); today.setHours(0,0,0,0);
-  var iso=function(d){var m=d.getMonth()+1,g=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(g<10?"0":"")+g;};
-  var slotMin=function(s){var p=s.split(":");return (+p[0])*60+(+p[1]);};
-  dateEl.min=iso(today); if(!dateEl.value) dateEl.value=iso(today);
-
-  for(var n=1;n<=20;n++){var o=document.createElement("option");o.value=n;o.textContent=n+(n===1?" persona":" persone");peopleEl.appendChild(o);}
-  peopleEl.value="2";
-
-  function bookedFor(date,slot){return (BOOKED[date]&&BOOKED[date][slot])?BOOKED[date][slot]:0;}
-
-  function renderSlots(){
-    var date=dateEl.value, people=parseInt(peopleEl.value,10)||0;
-    slotInput.value=""; slotsEl.innerHTML="";
-    if(!date||!people) return;
-
-    var now=new Date(); var oggiStr=iso(now); var nowMin=now.getHours()*60+now.getMinutes();
-
-    // Giorno già passato: non prenotabile
-    if(date<oggiStr){
-      var pn=document.createElement("div"); pn.className="slot-note";
-      pn.textContent="Questa data è già passata. Scegli un giorno da oggi in poi.";
-      slotsEl.appendChild(pn);
-      validate(); return;
-    }
-    var oggi=(date===oggiStr);
-
-    var p=date.split("-"); var dow=new Date(+p[0],+p[1]-1,+p[2]).getDay(); // 0=dom … 6=sab
-
-    if(CLOSED.indexOf(dow)!==-1){
-      var note=document.createElement("div"); note.className="slot-note";
-      note.textContent="Il pranzo è disponibile da lunedì a venerdì. Scegli un giorno feriale.";
-      slotsEl.appendChild(note);
-      validate(); return;
-    }
-
-    var h=document.createElement("div"); h.className="slot-group-label"; h.textContent="Pranzo";
-    slotsEl.appendChild(h);
-    var row=document.createElement("div"); row.className="slots-row";
-    var disponibili=0;
-    LUNCH.forEach(function(slot){
-      var passato=oggi && slotMin(slot)<=nowMin;               // orario già trascorso oggi
-      var full=(bookedFor(date,slot)+people)>(CAPACITY+GAP);   // fascia piena
-      var bloccato=passato||full;
-      if(!bloccato) disponibili++;
-      var el=document.createElement("div");
-      el.className="slot"+(bloccato?" full":"");
-      el.innerHTML=bloccato?(slot+'<span class="tag">'+(passato?"passato":"esaurito")+'</span>'):slot;
-      if(!bloccato){el.addEventListener("click",function(){
-        var s=document.querySelectorAll(".slot.sel"); for(var i=0;i<s.length;i++)s[i].classList.remove("sel");
-        el.classList.add("sel"); slotInput.value=slot; startCheckout(); validate();
-      });}
-      row.appendChild(el);
-    });
-    slotsEl.appendChild(row);
-    if(oggi && disponibili===0){
-      var fn=document.createElement("div"); fn.className="slot-note"; fn.style.marginTop="10px";
-      fn.textContent="Per oggi il pranzo è concluso. Scegli un altro giorno.";
-      slotsEl.appendChild(fn);
-    }
-    validate();
-  }
-
-  function validate(){
-    var emailOk=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailEl.value.trim());
-    var ok=dateEl.value&&peopleEl.value&&slotInput.value&&nameEl.value.trim().length>=2&&phoneEl.value.trim().length>=6&&emailOk&&privacyEl.checked;
-    if(ctaEl) ctaEl.disabled=!ok; return ok;
-  }
-  function fmtDate(s){var p=s.split("-");return p[2]+"/"+p[1]+"/"+p[0];}
-
-  function fbTrack(ev,par){ try{ if(typeof fbq==="function") fbq("track",ev,par||undefined); }catch(e){} }
-  var checkoutStarted=false;
-  function startCheckout(){ if(checkoutStarted) return; checkoutStarted=true; fbTrack("InitiateCheckout"); }
-
-  function submit(){
-    if(!validate()){errEl.textContent="Compila tutti i campi e accetta l'informativa privacy per confermare.";return;}
-    errEl.textContent="";
-    var date=dateEl.value,people=peopleEl.value,slot=slotInput.value,nome=nameEl.value.trim(),
-        tel=phoneEl.value.trim(),email=emailEl.value.trim(),menu="Piatto Tris — 13€";
-
-    // Sicurezza: rifiuta data passata o orario di oggi ormai trascorso
-    var nowc=new Date();
-    if(date<iso(nowc) || (date===iso(nowc) && slotMin(slot)<=nowc.getHours()*60+nowc.getMinutes())){
-      errEl.textContent="Il giorno o l'orario scelto è già passato. Aggiorna la selezione.";
-      renderSlots(); return;
-    }
-
-    /* Salva la prenotazione sullo STESSO Google Sheet delle bombette (Apps Script).
-       Stesso formato del payload bombette: URLSearchParams + campo "offerta" = tipologia
-       (qui "Pranzo"), così sul foglio e nell'email al ristoratore esce come tipologia Pranzo. */
-    if(SHEET_URL){
-      try{
-        fetch(SHEET_URL,{
-          method:"POST",
-          mode:"no-cors",
-          body:new URLSearchParams({
-            data:date, ora:slot, persone:people,
-            nome:nome, telefono:tel, email:email, richieste:"",
-            privacy:(privacyEl.checked?"Sì":"No"), marketing:(marketingEl.checked?"Sì":"No"),
-            offerta:OFFER_TAG
-          })
-        }).catch(function(){});
-      }catch(e){}
-    }
-
-    /* Meta Pixel: conversione prenotazione */
-    /* etichetta invariata dalla versione precedente: tiene insieme lo storico nel Gestore Eventi */
-    fbTrack("Lead",{content_name:"Prenotazione pranzo I Love Meat",content_category:"prenotazione"});
-
-    bookEl.innerHTML=
-      '<div class="success"><div class="ok">✓</div>'+
-      '<h3>Pranzo prenotato, '+nome.split(" ")[0]+'!</h3>'+
-      '<p>Il tuo tavolo è pronto, ti aspettiamo da I Love Meat per la tua pausa pranzo.</p>'+
-      '<p class="valid-note">Il coupon sarà valido solo per la data che hai inserito.</p>'+
-      '<div class="det">'+
-        '<div><span>Giorno:</span> '+fmtDate(date)+'</div>'+
-        '<div><span>Formula:</span> '+menu+'</div>'+
-        '<div><span>Persone:</span> '+people+'</div>'+
-        '<div><span>Orario:</span> '+slot+'</div>'+
-        '<div><span>A nome di:</span> '+nome+'</div>'+
-        '<div><span>Telefono:</span> '+tel+'</div>'+
-        '<div><span>Email:</span> '+email+'</div>'+
-      '</div>'+
-      '<p class="disdetta">La tua prenotazione costituisce un tavolo riservato. Noi di I Love Meat cerchiamo sempre di fare il meglio per voi: per questo, <b>in caso di disdetta vi chiediamo di avvisarci in anticipo</b>, per garantire sempre il miglior servizio per tutti.</p>'+
-      '<a class="again" href="tel:+393456881360" onclick="if(window.fbq)fbq(\'track\',\'Contact\')">Preferisci confermare a voce? Chiamaci</a></div>';
-    bookEl.scrollIntoView({behavior:"smooth",block:"center"});
-  }
-
-  // Apre il calendario toccando tutto il campo data (non solo l'iconcina)
-  function openDatePicker(){ try{ if(typeof dateEl.showPicker==="function") dateEl.showPicker(); }catch(e){} }
-  dateEl.addEventListener("click",openDatePicker);
-  dateEl.addEventListener("focus",openDatePicker);
-
-  dateEl.addEventListener("change",function(){startCheckout();renderSlots();});
-  peopleEl.addEventListener("change",function(){startCheckout();renderSlots();});
-  nameEl.addEventListener("input",function(){startCheckout();validate();});
-  phoneEl.addEventListener("input",function(){startCheckout();validate();});
-  emailEl.addEventListener("input",validate);
-  privacyEl.addEventListener("change",validate);
-  ctaEl.addEventListener("click",submit);
-
-  renderSlots();
-})();
-
-/* ====== CALENDARIO CUSTOM (grafica coerente col form) ======
-   Pilota l'input#data nascosto: alla scelta ne imposta il valore (ISO) e lancia
-   l'evento "change", così la logica delle fasce orarie qui sopra resta invariata. */
-(function(){
-  var input=document.getElementById("data");
-  var view=document.getElementById("dataView");
-  var label=document.getElementById("dataViewLabel");
-  var cal=document.getElementById("cal");
-  if(!input||!view||!cal) return;
-
-  var MESI=["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
-  var DOW=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
-  var CLOSED=[0,6]; // domenica e sabato: pranzo chiuso (come nella logica prenotazioni)
-
-  function iso(d){var m=d.getMonth()+1,g=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(g<10?"0":"")+g;}
-  function fmt(d){var p=iso(d).split("-");return p[2]+"/"+p[1]+"/"+p[0];}
-  function parseVal(){ if(input.value){var p=input.value.split("-");return new Date(+p[0],+p[1]-1,+p[2]);} return null; }
-
-  var today=new Date(); today.setHours(0,0,0,0);
-  var viewDate=new Date(today.getFullYear(),today.getMonth(),1);
-
-  function updateLabel(){
-    var sel=parseVal();
-    if(sel){ label.textContent=fmt(sel); view.classList.remove("placeholder"); }
-    else { label.textContent="Scegli il giorno"; view.classList.add("placeholder"); }
-  }
-
-  function render(){
-    var y=viewDate.getFullYear(), m=viewDate.getMonth(), sel=parseVal();
-    var startDow=(new Date(y,m,1).getDay()+6)%7;   // lunedì = 0
-    var giorni=new Date(y,m+1,0).getDate();
-    var h='<div class="cal-head">'+
-          '<button type="button" class="cal-nav" data-nav="-1" aria-label="Mese precedente">‹</button>'+
-          '<div class="cal-title">'+MESI[m]+' '+y+'</div>'+
-          '<button type="button" class="cal-nav" data-nav="1" aria-label="Mese successivo">›</button></div>'+
-          '<div class="cal-grid">';
-    for(var i=0;i<7;i++) h+='<div class="cal-dow">'+DOW[i]+'</div>';
-    for(var e=0;e<startDow;e++) h+='<div class="cal-day empty"></div>';
-    for(var g=1;g<=giorni;g++){
-      var d=new Date(y,m,g), cls="cal-day";
-      var off = d<today || CLOSED.indexOf(d.getDay())!==-1;
-      if(off) cls+=" off";
-      if(iso(d)===iso(today)) cls+=" today";
-      if(sel && iso(d)===iso(sel)) cls+=" sel";
-      h+='<div class="'+cls+'"'+(off?"":' data-day="'+iso(d)+'"')+'>'+g+'</div>';
-    }
-    cal.innerHTML=h+'</div>';
-  }
-
-  function open(){ var sel=parseVal(); if(sel){viewDate=new Date(sel.getFullYear(),sel.getMonth(),1);} render(); cal.hidden=false; }
-  function close(){ cal.hidden=true; }
-
-  view.addEventListener("click",function(e){ e.stopPropagation(); if(cal.hidden) open(); else close(); });
-  cal.addEventListener("click",function(e){
-    e.stopPropagation();
-    var nav=e.target.getAttribute("data-nav");
-    if(nav){ viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+(+nav),1); render(); return; }
-    var day=e.target.getAttribute("data-day");
-    if(day){ input.value=day; updateLabel(); input.dispatchEvent(new Event("change")); close(); }
-  });
-  document.addEventListener("click",function(){ if(!cal.hidden) close(); });
-
-  updateLabel();  // riflette l'eventuale data già impostata all'avvio
-})();
-</script>
 <!-- Iubenda I Love Meat: banner cookie + loader policy -->
 <script type="text/javascript" src="https://embeds.iubenda.com/widgets/97822096-e054-4146-9989-b79928a6b141.js"></script>
 <script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
