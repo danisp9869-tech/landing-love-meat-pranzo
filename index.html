@@ -66,7 +66,7 @@ a{color:inherit}
 .hero .lead{color:#eadfd4;font-size:19px;max-width:46ch;margin:20px auto 32px;text-shadow:0 2px 16px rgba(0,0,0,.8)}
 .hero .lead b{color:#fff}
 .hero .cta-row{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
-.hero .hero-coupon{margin:0 auto 16px;color:var(--senape);font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:16px;text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.hero .hero-scarsita{margin:0 auto 16px;color:var(--senape);font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:16px;text-shadow:0 2px 12px rgba(0,0,0,.8)}
 .hero .rate{font-size:13.5px;color:#cfc6bc;text-shadow:0 1px 10px rgba(0,0,0,.8)}
 .hero .rate b{color:#fff}
 @media (max-width:600px){
@@ -109,8 +109,8 @@ a{color:inherit}
 .offer .price small{display:inline-block;font-family:"Inter",sans-serif;color:var(--muted);font-size:15px;font-weight:600;margin-left:8px;vertical-align:middle}
 .offer .btn{margin-top:24px}
 .offer .fine{margin-top:14px;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
-/* disponibilità coupon sotto la CTA del box offerta */
-.offer .coupon-avail{margin-top:12px;color:var(--red);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+/* scarsità sotto la CTA del box offerta */
+.offer .scarsita-offerta{margin-top:12px;color:var(--red);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
 .offer-foto{position:relative;z-index:1;border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:360px}
 .offer-foto img{width:100%;height:100%;object-fit:cover}
 /* variante senza foto: box a colonna singola, contenuto centrato */
@@ -177,12 +177,12 @@ a{color:inherit}
 /* ---- PRENOTAZIONE ---- */
 .book-sec{background:linear-gradient(180deg,#100c0a,#0a0908)}
 .book-head{text-align:center;margin-bottom:26px;scroll-margin-top:96px}
-/* spiegazione del coupon sotto il titolo del form */
+/* spiegazione sotto il titolo del form */
 .book-head .spiega{margin:14px auto 0;max-width:46ch;color:#ded6cc;font-size:16px;line-height:1.5}
 .book-head .spiega b{color:#fff}
 .book-head h2{font-size:clamp(30px,5.4vw,58px);margin-top:6px}
 .book-head p{color:var(--muted);font-size:16px;margin-top:10px}
-.book-head .book-coupon{color:var(--senape);font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:18px;margin-top:10px}
+.book-head .book-scarsita{color:var(--senape);font-family:"Anton","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:18px;margin-top:10px}
 .book{max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px}
 /* contenitore dell'embed Dinevo: stessa larghezza del form, centrato */
 .book-embed{max-width:560px;margin:0 auto}
@@ -263,7 +263,7 @@ a{color:inherit}
 /* nota di disdetta: cortesia, non penale — fondo rosso appena acceso sul form bianco */
 .book .success .disdetta{margin-top:14px;padding:12px 14px;background:rgba(209,40,31,.06);border:1px solid rgba(209,40,31,.25);border-radius:10px;color:#5f574f;font-size:14px;line-height:1.5;text-align:left}
 .book .success .disdetta b{color:#1c1712}
-/* nota validità coupon sotto il titolo della conferma */
+/* nota di validità sotto il titolo della conferma */
 .book .success .valid-note{margin-top:8px;color:var(--red);font-weight:700;font-size:14.5px}
 
 /* ---- SUCCESS ---- */
@@ -361,7 +361,7 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
 <!-- NAV -->
 <nav class="nav">
   <div class="logo">I Love Meat<small>Pausa pranzo · Pianezza</small></div>
-  <a class="btn" href="#prenota">Riserva il coupon</a>
+  <a class="btn" href="#prenota">Prenota un tavolo</a>
 </nav>
 
 <!-- HERO -->
@@ -376,9 +376,9 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
       <span class="side"><s>da 26€</s><span class="ti">tutto incluso</span></span>
     </div>
     <p class="lead">Da I Love Meat il pranzo è ormai una tradizione. Al posto del solito panino triste <b>goditi un pranzo vero</b>.</p>
-    <div class="hero-coupon">25 coupon disponibili</div>
+    <div class="hero-scarsita">Pochi tavoli disponibili</div>
     <div class="cta-row">
-      <a class="btn" href="#prenota">Riserva il coupon</a>
+      <a class="btn" href="#prenota">Prenota un tavolo</a>
       <div class="rate"><span class="stars">★★★★★</span><br><b>4.9</b> · 500+ recensioni</div>
     </div>
   </div>
@@ -402,8 +402,8 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
     <div class="book-head" id="prenota">
       <span class="kicker">Prenota</span>
       <h2 class="display">Prenota un tavolo e riscatta l'offerta</h2>
-      <p class="spiega">Compilando il form prenoti un tavolo a tuo nome e potrai usufruire del coupon. <b>Sarà valido solo per la data inserita.</b></p>
-      <p class="book-coupon">Ancora pochi disponibili</p>
+      <p class="spiega">Compilando il form prenoti un tavolo a tuo nome. <b>L’offerta è valida solo per la data inserita.</b></p>
+      <p class="book-scarsita">Pochi tavoli disponibili</p>
       <p>Ci vogliono 20 secondi. Salti la fila.</p>
     </div>
 
@@ -426,6 +426,14 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         if (!reduce) frame.style.transition = 'height 0.2s ease';
         frame.style.height = event.data.height + 'px';
       });
+      if (typeof window.fbq === 'function') {
+        window.addEventListener('message', function (event) {
+          if (!event.data || event.data.type !== 'dinevo:booking-confirmed') return;
+          var frame = document.getElementById('dinevo-booking');
+          if (!frame || event.source !== frame.contentWindow) return;
+          window.fbq('track', 'Purchase', { value: 0, currency: 'EUR' });
+        });
+      }
     </script>
   </div>
 </section>
@@ -450,8 +458,8 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
           <li>Perfetto se vuoi mangiare bene ma hai poco tempo</li>
         </ul>
         <div class="price">13€<small>a persona</small></div>
-        <a class="btn" href="#prenota">Riserva il coupon</a>
-        <div class="coupon-avail">25 coupon disponibili</div>
+        <a class="btn" href="#prenota">Prenota un tavolo</a>
+        <div class="scarsita-offerta">Pochi tavoli disponibili</div>
         <div class="fine">Solo a pranzo · Lun–Ven</div>
       </div>
     </div>
@@ -482,7 +490,7 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         <p>Servizio rapido pensato per chi ha la pausa contata. Esci sazio e in orario.</p>
       </div>
     </div>
-    <div class="steps-cta"><a class="btn" href="#prenota">Riserva il coupon</a></div>
+    <div class="steps-cta"><a class="btn" href="#prenota">Prenota un tavolo</a></div>
   </div>
 </section>
 
@@ -524,7 +532,7 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
 <!-- CTA PRIMA DI "DOVE E QUANDO" -->
 <section class="section" style="padding-top:0">
   <div class="wrap">
-    <div class="steps-cta" style="margin-top:0"><a class="btn" href="#prenota">Riserva il coupon</a></div>
+    <div class="steps-cta" style="margin-top:0"><a class="btn" href="#prenota">Prenota un tavolo</a></div>
   </div>
 </section>
 
