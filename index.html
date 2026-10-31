@@ -80,10 +80,10 @@ video.hero-video{filter:none;-webkit-mask-image:none;mask-image:none;
 .hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,9,8,.42),rgba(10,9,8,.2) 42%,rgba(10,9,8,.94) 96%)}
 /* video sushi dell'hero: a tutto riquadro, sopra l'immagine. Niente mask: la
    leggibilità del testo la dà il gradiente .hero::before qui sopra. */
-.hero-vid-sushi{z-index:0;height:100%;object-fit:cover;-webkit-mask-image:none;mask-image:none}
+.hero-vid-sushi{z-index:0;height:100%;object-fit:cover;-webkit-mask-image:none;mask-image:none;filter:brightness(.56) saturate(1.08)}
 .hero-vid-sushi::-webkit-media-controls,.hero-vid-sushi::-webkit-media-controls-start-playback-button{display:none!important;-webkit-appearance:none}
 .hero-inner{position:relative;z-index:2;max-width:1120px}
-.hero .badge{margin-bottom:18px;background:rgba(10,9,8,.7)}
+.hero .badge{margin-bottom:26px;background:rgba(10,9,8,.7)}
 .hero h1{font-size:clamp(64px,13vw,196px);text-shadow:0 4px 34px rgba(0,0,0,.65)}
 .hero h1 .l2{color:var(--red)}
 /* titolo su due righe ("Polletto" / "alla griglia"): ogni riga resta intera,
@@ -97,7 +97,10 @@ video.hero-video{filter:none;-webkit-mask-image:none;mask-image:none;
    ombra per restare leggibile sopra il video */
 .hero .scarsita-hero{margin:14px auto 0;color:var(--gold);font-family:"Inter",sans-serif;font-weight:500;
   font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;text-shadow:0 1px 10px rgba(0,0,0,.9)}
-.hero .sottotitolo-hero{margin:14px auto 30px;color:#fff;font-family:"Anton","Arial Narrow",sans-serif;
+.hero .sottotitolo-hero{margin:30px auto 20px;color:#fff;font-family:"Anton","Arial Narrow",sans-serif;
+  text-transform:uppercase;letter-spacing:.04em;line-height:1.3;font-size:clamp(13px,3.3vw,18px);
+  text-shadow:0 2px 14px rgba(0,0,0,.8)}
+.hero .quando-hero{margin:2px auto 40px;color:#fff;font-family:"Anton","Arial Narrow",sans-serif;
   text-transform:uppercase;letter-spacing:.04em;line-height:1.1;font-size:clamp(20px,5.4vw,34px);
   text-shadow:0 2px 14px rgba(0,0,0,.8)}
 .hero .lead{color:#eadfd4;font-size:19px;max-width:42ch;margin:24px auto 32px;text-shadow:0 2px 16px rgba(0,0,0,.8)}
@@ -356,9 +359,9 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
   </video>
   <div class="wrap hero-inner">
     <span class="badge"><span class="dot"></span>Pianezza · Largo II Giugno 2</span>
-    <h1 class="display">Se ami il sushi<br><span class="l2">provalo di carne</span></h1>
-    <p class="descr-hero">Non pesce: roll e nigiri di sola carne selezionata, lavorati a mano</p>
-    <p class="sottotitolo-hero">Solo a Pianezza da I Love Meat · intera cena di sushi di carne a 22,90€</p>
+    <h1 class="display">Ami il sushi?<br><span class="l2">provalo di carne</span></h1>
+    <p class="sottotitolo-hero">Intera cena di sushi di carne selezionata a soli 22,90€</p>
+    <p class="quando-hero">Ogni lunedì sera</p>
     <div class="cta-row">
       <a class="btn" href="#book">Prenota un tavolo</a>
     </div>
@@ -383,7 +386,7 @@ src="https://www.facebook.com/tr?id=1752658912398511&ev=PageView&noscript=1"
         <div class="fine">Posti limitati</div>
       </div>
       <figure class="offer-foto">
-        <img src="offerta-sushi.jpg" decoding="async" alt="Piatto di sushi di carne con topping cremoso" loading="lazy">
+        <img src="offerta-sushi.jpg" decoding="async" alt="Tagliere con l'assortimento di sushi di carne: roll e nigiri" loading="lazy">
       </figure>
     </div>
   </div>
